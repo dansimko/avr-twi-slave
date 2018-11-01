@@ -71,11 +71,13 @@ ISR(TWI_vect) {
 		case TW_SR_GCALL_DATA_ACK:
 		case TW_SR_GCALL_DATA_NACK:*/
 		case TW_SR_STOP:
-			data_recv_call();
+			if (data_recv_call != 0)
+				data_recv_call();
 			TWCR = (1<<TWIE) | (1<<TWINT) | (1<<TWEA) | (1<<TWEN);
 			break;
 		case TW_ST_SLA_ACK:
-			data_req_call();
+			if (data_req_call != 0)
+				data_req_call();
 			TWDR = twidata[twi_reg_addr];
 			twi_reg_addr++;
 			TWCR = (1<<TWIE) | (1<<TWINT) | (1<<TWEA) | (1<<TWEN);

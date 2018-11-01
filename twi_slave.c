@@ -76,6 +76,8 @@ ISR(TWI_vect) {
 			break;
 		case TW_ST_SLA_ACK:
 			data_req_call();
+			TWDR = twidata[twi_reg_addr];
+			twi_reg_addr++;
 			TWCR = (1<<TWIE) | (1<<TWINT) | (1<<TWEA) | (1<<TWEN);
 			break;
 		/*case TW_ST_ARB_LOST_SLA_ACK:*/

@@ -57,6 +57,7 @@ ISR(TWI_vect) {
 				} else {
 					twi_reg_addr = 0x00;
 				}
+				TWCR = (1<<TWIE) | (1<<TWINT) | (1<<TWEA) | (1<<TWEN);
 			} else {
 				if (twi_reg_addr < TWI_REG_SIZE) {
 					twidata[twi_reg_addr++] = TWDR;
@@ -71,24 +72,11 @@ ISR(TWI_vect) {
 		case TW_SR_GCALL_DATA_NACK:
 		case TW_SR_STOP:
 		case TW_ST_SLA_ACK:
-			twi_reg_addr = TWI_REG_SIZE;
-			if (data_req_call != 0) {
-				data_req_call();
-			}
+			data_req_call();
 			TWCR = (1<<TWIE) | (1<<TWINT) | (1<<TWEA) | (1<<TWEN);
 			break;
 		case TW_ST_ARB_LOST_SLA_ACK:
 		case TW_ST_DATA_ACK:
-			rx_data = TWDR;
-
-			if (twi_reg_addr >= TWI_REG_SIZE) {
-				if (rx_data < TWI_REG_SIZE) {
-					twi_reg_addr = rx_data;
-				} else {
-					twi_reg_addr = 0x00;
-				}
-			}
-
 			TWDR = twidata[twi_reg_addr++];
 
 			if (twi_reg_addr < TWI_REG_SIZE) {

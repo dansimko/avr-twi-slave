@@ -10,13 +10,11 @@
 #define TWI_ADDRESS 0x28
 
 void data_received() {
-	/* do something */
+	/* do something after receiving data */
 }
 
 void data_request() {
-	for (int i = 0; i < TWI_REG_SIZE; i++) {
-		twidata[i] = i;
-	}
+	/* do something after data being requested */
 }
 
 int main() {
